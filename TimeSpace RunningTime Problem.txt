@@ -1,0 +1,5 @@
+Time Complexity: O(n²)
+Insertion Sort has a quadratic time complexity in the worst case. This happens when the array is in reverse order, requiring each element to be compared with all the other elements already sorted making the number of comparisons and shifts approach n(n-1)/2, where n is the number of elements in the array.
+
+Space Complexity: O(1)
+Insertion Sort is an in-place sorting algorithm, meaning it requires a constant amount of additional space regardless of the input size. This makes its space complexity O(1), as it only uses a fixed amount of extra space for variables used in the algorithm, like key and j in the given implementation.

@@ -1,0 +1,90 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import  javafx.util.Pair;
+
+class Result {
+
+    private static int countPairs(int i, int j, int m, List<Integer> arr, Integer[][] memo) {
+        // Base case: if we are at the end of the array or if j has wrapped around.
+        if (i >= arr.size() || j >= arr.size() || i == j) {
+            return 0;
+        }
+        
+        // Check the memo table
+        if (memo[i][j] != null) {
+            return memo[i][j];
+        }
+        
+        int count = 0;
+        // Check if the current pair sums up to m
+        if (arr.get(i) + arr.get(j) == m) {
+            count = 1;
+        }
+        
+        // Recur for the next pair
+        count += countPairs(i + 1, j + 1, m, arr, memo);
+        
+        // Store in memo table
+        memo[i][j] = count;
+        
+        return count;
+    }
+
+    public static int icecreamParlor(int m, List<Integer> arr) {
+        Integer[][] memo = new Integer[arr.size()][arr.size()];
+        int count = 0;
+        // Start the recursion from the first index and iterate over all pairs
+        for (int i = 0; i < arr.size(); i++) {
+            for (int j = i + 1; j < arr.size(); j++) {
+                count += countPairs(i, j, m, arr, memo);
+            }
+        }
+        return count;
+    }
+}
+
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int t = Integer.parseInt(bufferedReader.readLine().trim());
+
+        IntStream.range(0, t).forEach(tItr -> {
+            try {
+                int m = Integer.parseInt(bufferedReader.readLine().trim());
+
+                int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+                List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                    .map(Integer::parseInt)
+                    .collect(toList());
+
+                Integer result = Result.icecreamParlor(m, arr);
+                bufferedWriter.write(result.toString() + "\n");
+                
+                // bufferedWriter.write(
+                //     result.stream()
+                //         .map(Object::toString)
+                //         .collect(joining(" "))
+                //     + "\n"
+                // );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
